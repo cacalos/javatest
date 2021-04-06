@@ -1,3 +1,7 @@
+package com.uangel.training;
+
+import org.junit.Test;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
@@ -8,6 +12,13 @@ import javax.inject.Singleton;
 public class GoogleGuiceExample {
     public static void main(String[] args) {
         Injector injector = Guice.createInjector(new AppInjector());
+        MyController app = injector.getInstance(MyController.class); // at this moment the data was injected
+        System.out.println(app.getDatabaseData());
+    }
+
+    @Test
+    public void testMySql() {
+        Injector injector = Guice.createInjector(new AppInjector1());
         MyController app = injector.getInstance(MyController.class); // at this moment the data was injected
         System.out.println(app.getDatabaseData());
     }
@@ -30,6 +41,13 @@ class AppInjector extends AbstractModule {
     @Override
     protected void configure() {
         bind(Database.class).to(InMemoryDatabase.class);
+    }
+}
+
+class AppInjector1 extends AbstractModule {
+    @Override
+    protected void configure() {
+        bind(Database.class).to(MySqlDatabase.class);
     }
 }
 
